@@ -25,41 +25,43 @@ namespace WebSpider
     {
         public MainWindow()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            using (SqlConnection con = new SqlConnection(Crawler._connectionstring))
-            {
-                SqlCommand sqlcmd = new SqlCommand();
-                sqlcmd.Connection = con;
-                sqlcmd.CommandText = "Truncate table UrlList";
-                sqlcmd.Connection.Open();
-                sqlcmd.ExecuteNonQuery();
-                sqlcmd.Connection.Close();
-                sqlcmd.CommandText = "Truncate table Link";
-                sqlcmd.Connection.Open();
-                sqlcmd.ExecuteNonQuery();
-                sqlcmd.Connection.Close();
-                sqlcmd.CommandText = "Truncate table WordList";
-                sqlcmd.Connection.Open();
-                sqlcmd.ExecuteNonQuery();
-                sqlcmd.Connection.Close();
-                sqlcmd.CommandText = "Truncate table Wordlocation";
-                sqlcmd.Connection.Open();
-                sqlcmd.ExecuteNonQuery();
-                sqlcmd.Connection.Close();
-            }
+            // using (SqlConnection con = new SqlConnection(Crawler._connectionstring))
+            // {
+            // SqlCommand sqlcmd = new SqlCommand();
+            // sqlcmd.Connection = con;
+            // sqlcmd.CommandText = "Truncate table UrlList";
+            // sqlcmd.Connection.Open();
+            // sqlcmd.ExecuteNonQuery();
+            // sqlcmd.Connection.Close();
+            // sqlcmd.CommandText = "Truncate table Link";
+            // sqlcmd.Connection.Open();
+            // sqlcmd.ExecuteNonQuery();
+            // sqlcmd.Connection.Close();
+            // sqlcmd.CommandText = "Truncate table WordList";
+            // sqlcmd.Connection.Open();
+            // sqlcmd.ExecuteNonQuery();
+            // sqlcmd.Connection.Close();
+            // sqlcmd.CommandText = "Truncate table Wordlocation";
+            // sqlcmd.Connection.Open();
+            // sqlcmd.ExecuteNonQuery();
+            // sqlcmd.Connection.Close();
+            // }
             Stopwatch s = new Stopwatch();
-            
-            s.Start();
             ProxyCrawler c = new ProxyCrawler();
-            Thread t=new Thread(()=> { s.Start(); c.Crawl(@"http://ru.wikipedia.org", 2);s.Stop(); MessageBox.Show(s.ElapsedMilliseconds.ToString()); });
+            Thread t = new Thread(() => 
+            {
+                s.Start();
+                c.Crawl(@"http://ru.wikipedia.org", 1);
+                s.Stop();
+                MessageBox.Show(s.ElapsedMilliseconds.ToString());
+            });
             t.Start();
-            s.Stop();
-            MessageBox.Show(s.ElapsedMilliseconds.ToString());
-
+            Thread.Sleep(10000);
         }
     }
 }

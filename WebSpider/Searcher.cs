@@ -6,10 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebSpider
 {
-    public interface ICrawler
+    public class Searcher
     {
-        void ParseLink(string url);
-
-        List<String> Crawl(String start_url, int depth);
     }
 }
