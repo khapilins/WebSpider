@@ -1,3 +1,1 @@
-<StyleCopViolations>
-  <Violation Section="Root.WebSpider.ProxyCrawler" LineNumber="10" Source="C:\Users\khapi\documents\visual studio 2015\Projects\WebSpider\WebSpider\ProxyCrawler.cs" RuleNamespace="StyleCop.CSharp.LayoutRules" Rule="OpeningCurlyBracketsMustNotBeFollowedByBlankLine" RuleId="SA1505">An opening curly bracket must not be followed by a blank line.</Violation>
-</StyleCopViolations>
+<StyleCopViolations />

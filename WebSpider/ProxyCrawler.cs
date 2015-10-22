@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WebSpider
 {
     public class ProxyCrawler : ICrawler
     {        
-
         private Crawler _crawler;
 
         public Crawler CrawlerObj

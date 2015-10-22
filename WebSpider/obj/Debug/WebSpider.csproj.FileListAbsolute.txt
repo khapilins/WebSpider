@@ -1,7 +1,6 @@
 c:\users\khapi\documents\visual studio 2015\Projects\WebSpider\WebSpider\bin\Debug\WebSpider.exe.config
 C:\Users\khapi\documents\visual studio 2015\Projects\WebSpider\WebSpider\bin\Debug\WebSpider.exe
 C:\Users\khapi\documents\visual studio 2015\Projects\WebSpider\WebSpider\bin\Debug\WebSpider.pdb
-C:\Users\khapi\documents\visual studio 2015\Projects\WebSpider\WebSpider\obj\Debug\WebSpider.csprojResolveAssemblyReference.cache
 C:\Users\khapi\documents\visual studio 2015\Projects\WebSpider\WebSpider\obj\Debug\MainWindow.g.cs
 C:\Users\khapi\documents\visual studio 2015\Projects\WebSpider\WebSpider\obj\Debug\App.g.cs
 C:\Users\khapi\documents\visual studio 2015\Projects\WebSpider\WebSpider\obj\Debug\WebSpider_MarkupCompile.cache
