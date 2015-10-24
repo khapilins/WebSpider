@@ -39,7 +39,7 @@ namespace WebSpider
             // }
             Stopwatch s = new Stopwatch();
             ProxyCrawler c = new ProxyCrawler();
-            Thread t = new Thread(() => 
+            Thread t = new Thread(() =>
             {
                 s.Start();
                 c.Crawl(@"http://ru.wikipedia.org", 1);
@@ -47,7 +47,6 @@ namespace WebSpider
                 MessageBox.Show(s.ElapsedMilliseconds.ToString());
             });
             t.Start();
-            Thread.Sleep(10000);
         }
     }
 }

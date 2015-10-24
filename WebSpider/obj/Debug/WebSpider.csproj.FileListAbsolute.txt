@@ -11,3 +11,8 @@ C:\Users\khapi\documents\visual studio 2015\Projects\WebSpider\WebSpider\obj\Deb
 C:\Users\khapi\documents\visual studio 2015\Projects\WebSpider\WebSpider\obj\Debug\WebSpider.csproj.GenerateResource.Cache
 C:\Users\khapi\documents\visual studio 2015\Projects\WebSpider\WebSpider\obj\Debug\WebSpider.exe
 C:\Users\khapi\documents\visual studio 2015\Projects\WebSpider\WebSpider\obj\Debug\WebSpider.pdb
+C:\Users\khapi\Documents\Visual Studio 2015\Projects\WebSpider\WebSpider\bin\Debug\EntityFramework.dll
+C:\Users\khapi\Documents\Visual Studio 2015\Projects\WebSpider\WebSpider\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\khapi\Documents\Visual Studio 2015\Projects\WebSpider\WebSpider\bin\Debug\EntityFramework.xml
+C:\Users\khapi\Documents\Visual Studio 2015\Projects\WebSpider\WebSpider\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\khapi\Documents\Visual Studio 2015\Projects\WebSpider\WebSpider\obj\Debug\WebSpider.csprojResolveAssemblyReference.cache
