@@ -7,6 +7,18 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525" Loaded="Window_Loaded">
     <Grid>
-        
+        <TextBox x:Name="SearchQuerytextBox" HorizontalAlignment="Stretch" Height="23" Margin="10,10,10,0" TextWrapping="Wrap" Text="Введите поисковый запрос" VerticalAlignment="Top" />
+        <ListBox x:Name="SearchResultslistBox" Margin="15,56,10,35" ItemsSource="{Binding}">
+            <ListBox.ItemTemplate>
+        <DataTemplate DataType="String">
+            <TextBlock>
+                <Hyperlink NavigateUri="{Binding}" Click="Hyperlink_RequestNavigate">
+                    <TextBlock Text="{Binding}" />
+                </Hyperlink>
+            </TextBlock>
+        </DataTemplate>
+    </ListBox.ItemTemplate>
+</ListBox>
+        <Button x:Name="SearchButton" Content="Искать" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Click="SearchButton_Click"/>
     </Grid>
 </Window>

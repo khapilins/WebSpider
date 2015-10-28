@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace WebSpider
 {
     public class PageWord
-    {       
+    {
         public PageWord() { }
 
         public PageWord(String page, string word, int location)
@@ -18,7 +18,7 @@ namespace WebSpider
                 Word temp_word = null;
                 PageWord page_word_query = null;
 
-                temp_page = new Page(page); 
+                temp_page = new Page(page);
                 temp_word = new Word(word);
 
                 try
@@ -53,5 +53,58 @@ namespace WebSpider
         public int WordID { get; set; }
 
         public int Location { get; set; }
+
+        public Page ConcretePage
+        {
+            get
+            {
+                Page res = null;
+                using (PageDBContext pc = new PageDBContext())
+                {
+                    try
+                    {
+                        res = pc.Pages.Find(this.PageID);
+                    }
+                    catch (InvalidOperationException iex)
+                    { }
+                }
+
+                return res;
+            }
+        }
+
+        public Word ConcreteWord
+        {
+            get
+            {
+                Word res = null;
+                using (PageDBContext pc = new PageDBContext())
+                {
+                    try
+                    {
+                        res = pc.Words.Find(this.WordID);
+                    }
+                    catch (InvalidOperationException iex)
+                    { }
+                }
+
+                return res;
+            }
+        }
+
+        public static List<PageWord> GetPageWordByWord(string word)
+        {
+            List<PageWord> res = new List<PageWord>();
+            using (PageDBContext pc = new PageDBContext())
+            {
+                int wordId = new Word(word).WordID;
+                IEnumerable<PageWord> query = from pw in pc.PageWord
+                                              where pw.WordID == wordId
+                                              select pw;
+                res.AddRange(query);
+            }
+
+            return res;
+        }
     }
 }

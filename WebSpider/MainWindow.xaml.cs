@@ -1,6 +1,10 @@
 ﻿using System.Diagnostics;
 using System.Threading;
 using System.Windows;
+using System.Windows.Documents;
+using System.Windows.Navigation;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace WebSpider
 {
@@ -15,38 +19,31 @@ namespace WebSpider
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            // using (SqlConnection con = new SqlConnection(Crawler._connectionstring))
+        {            
+            // Stopwatch s = new Stopwatch();
+            // ProxyCrawler c = new ProxyCrawler();
+            // Thread t = new Thread(() =>
             // {
-            // SqlCommand sqlcmd = new SqlCommand();
-            // sqlcmd.Connection = con;
-            // sqlcmd.CommandText = "Truncate table UrlList";
-            // sqlcmd.Connection.Open();
-            // sqlcmd.ExecuteNonQuery();
-            // sqlcmd.Connection.Close();
-            // sqlcmd.CommandText = "Truncate table Link";
-            // sqlcmd.Connection.Open();
-            // sqlcmd.ExecuteNonQuery();
-            // sqlcmd.Connection.Close();
-            // sqlcmd.CommandText = "Truncate table WordList";
-            // sqlcmd.Connection.Open();
-            // sqlcmd.ExecuteNonQuery();
-            // sqlcmd.Connection.Close();
-            // sqlcmd.CommandText = "Truncate table Wordlocation";
-            // sqlcmd.Connection.Open();
-            // sqlcmd.ExecuteNonQuery();
-            // sqlcmd.Connection.Close();
-            // }
-            Stopwatch s = new Stopwatch();
-            ProxyCrawler c = new ProxyCrawler();
-            Thread t = new Thread(() =>
-            {
-                s.Start();
-                c.Crawl(@"http://ru.wikipedia.org", 1);
-                s.Stop();
-                MessageBox.Show(s.ElapsedMilliseconds.ToString());
-            });
-            t.Start();
+            //    s.Start();
+            //    c.Crawl(@"http://ru.wikipedia.org", 1);
+            //    s.Stop();
+            //    MessageBox.Show(s.ElapsedMilliseconds.ToString());
+            // });
+            // t.Start();
+        }
+
+        private void SearchButton_Click(object sender, RoutedEventArgs e)
+        {
+            Searcher s = new Searcher(SearchQuerytextBox.Text);
+            s.SearchByFrequency();                        
+            SearchResultslistBox.DataContext = s.Results;
+        }
+
+        private void Hyperlink_RequestNavigate(object sender, RoutedEventArgs e)
+        {
+            Hyperlink h = (Hyperlink)e.Source;                                    
+            Process.Start(new ProcessStartInfo(h.DataContext.ToString()));
+            e.Handled = true;
         }
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace WebSpider
 {
     public class Word
-    {        
+    {
         public Word() { }
 
         public Word(String word)
@@ -39,5 +39,24 @@ namespace WebSpider
         public int WordID { get; set; }
 
         public String WordValue { get; set; }
+
+        public float Probability
+        {
+            get
+            {
+                using (PageDBContext pc = new PageDBContext())
+                {
+                    try
+                    {
+                        var query = from pw in pc.PageWord
+                                    where pw.WordID == this.WordID
+                                    select pw;
+                        return (float)query.Count() / (float)pc.PageWord.Count();
+                    }
+                    catch (InvalidOperationException iex)
+                    { return 0; }
+                }
+            }
+        }
     }
 }
