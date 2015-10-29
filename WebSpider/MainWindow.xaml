@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:WebSpider"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525" Loaded="Window_Loaded">
-    <Grid>
-        <TextBox x:Name="SearchQuerytextBox" HorizontalAlignment="Stretch" Height="23" Margin="10,10,10,0" TextWrapping="Wrap" Text="Введите поисковый запрос" VerticalAlignment="Top" />
+    <Grid >
+        <TextBox x:Name="SearchQuerytextBox" HorizontalAlignment="Stretch" Height="23" Margin="10,10,10,0" TextWrapping="Wrap" Text="Введите поисковый запрос" VerticalAlignment="Top" Background="Red" />
         <ListBox x:Name="SearchResultslistBox" Margin="15,56,10,35" ItemsSource="{Binding}">
             <ListBox.ItemTemplate>
         <DataTemplate DataType="String">
