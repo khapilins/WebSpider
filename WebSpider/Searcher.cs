@@ -44,7 +44,7 @@ namespace WebSpider
                     if (!urls.Contains(p.Url))
                     {
                         urls.Add(p.Url);
-                        this.Results.Add(new SearchResults(p.Url, 1));
+                        this.Results.Add(new SearchResults(p, 1));
                     }
                 }
                 ////foundPages.Add(pw.ConcretePage);                
@@ -68,12 +68,15 @@ namespace WebSpider
 
             foreach (PageWord pw in foundPageWord)
             {
-                foundPages.Add(pw.ConcretePage);
+                if (!foundPages.Contains(pw.ConcretePage))
+                {
+                    foundPages.Add(pw.ConcretePage);
+                }
             }
 
             foreach (Page page in foundPages)
             {
-                SearchResults s = new SearchResults(page.Url, 0);
+                SearchResults s = new SearchResults(page, 0);
                 foreach (Word word in words)
                 {
                     foreach (PageWord pageWord in foundPageWord)
@@ -93,12 +96,14 @@ namespace WebSpider
 
         private void NormaliseAndSortResults()
         {
-            float small = 0.0000001f;
-            float max = Results.Max(r => r.Score);
-            if (small > max) { max = small; }
-
-            Results.ForEach(r => r.Score = 1 - (r.Score / max));
-            Results = Results.OrderBy(r => r.Score).ToList();
+            if (Results.Count > 0)
+            {
+                float small = 0.0000001f;
+                float max = Results.Max(r => r.Score);
+                if (small > max) { max = small; }
+                Results.ForEach(r => r.Score = 1 - (r.Score / max));
+                Results = Results.OrderBy(r => r.Score).ToList();
+            }
         }
 
         private List<Word> SplitQuery()
@@ -116,13 +121,29 @@ namespace WebSpider
 
     public class SearchResults
     {
-        public SearchResults(string link, float score)
+        public SearchResults(Page res_page, float score)
         {
-            this.ResultLink = link;
+            this.ResultPage = res_page;
             this.Score = score;
         }
 
-        public string ResultLink { get; set; }
+        public Page ResultPage { get; set; }
+
+        public string ResultLink
+        {
+            get
+            {
+                return ResultPage.Url;
+            }
+        }
+
+        public String PageTitle
+        {
+            get
+            {
+                return ResultPage.PageTitle;
+            }
+        }
 
         public float Score { get; set; }
 

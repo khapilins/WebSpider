@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace WebSpider
 {
     public class Crawler : ICrawler
-    {        
+    {
         private List<String> _links = new List<string>();
 
         public List<string> LINKS { get { return _links; } set { _links = value; } }
@@ -29,50 +29,57 @@ namespace WebSpider
 
         public string ExtractedLinksText { get; set; }
 
-        public void ParseLink(string url)
+        public void ParseLinkText(string url)
         {
             URL = url;
             WebClient web = new WebClient();
             web.Encoding = Encoding.UTF8;
             try
             {
-                HTMLText = web.DownloadString(url);
+                String HTMLText = web.DownloadString(url);
                 HTMLText = Regex.Replace(HTMLText, "(</br>)|(<br>)", " ");
                 HTMLText = Regex.Replace(HTMLText, @"<span\s?(.*?)>|</span>", "");
                 HTMLText = Regex.Replace(HTMLText, "&(.*?);", " ");
 
-                ParseHTML();
+                ParseHTMLForText();
             }
             catch (Exception ex)
             { Log(ex); }
-        }      
+        }
 
-        public List<String> Crawl(string start_url, int depth)
+        public void Crawl(string start_url, int depth)
         {
             List<String> quee = new List<string>();
-            List<string> res = new List<string>();
-            ParseLink(start_url);
+            ParseLinkText(start_url);
             quee.AddRange(LINKS);
-            res.AddRange(LINKS);
             SaveEntity();
-
             LINKS = new List<string>();
             for (int i = 1; i < depth; ++i)
             {
                 int quee_length = quee.Count();
                 for (int j = 0; j < quee_length; ++j)
                 {
-                    ParseLink(quee[0]);
-                    res.Add(quee[0]);
+                    ParseLinkText(quee[0]);
                     quee.AddRange(LINKS);
                     SaveEntity();
                     LINKS = new List<string>();
                     quee.RemoveAt(0);
                 }
             }
+        }
 
-            res.AddRange(quee);
-            return res;
+        public void CrawlNext(int depth)
+        {
+            using (PageDBContext pc = new PageDBContext())
+            {
+                foreach (Link l in Link.SelectLastLinks())
+                {
+                    foreach (Page p in pc.Pages.Where(pp => pp.PageID == l.ToPage))
+                    {
+                        Crawl(p.Url, depth);
+                    }
+                }
+            }
         }
 
         public void SaveEntity()
@@ -112,8 +119,9 @@ namespace WebSpider
             sr.Close();
         }
 
-        private void ParseHTML()
+        private void ParseHTMLForText()
         {
+            StringBuilder res = new StringBuilder();
             ParseLinksChain firstchain = new ParseLinksChain();
             ParseHeadersChain second = new ParseHeadersChain();
             ParseParagraphsChain third = new ParseParagraphsChain();
@@ -124,6 +132,6 @@ namespace WebSpider
             third.SetNext(fourth);
             fourth.SetNext(fifth);
             firstchain.SendNext(this);
-        } 
+        }
     }
 }

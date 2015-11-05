@@ -21,16 +21,16 @@ namespace WebSpider
             }
         }
        
-        public void ParseLink(String url)
+        public void ParseLinkText(String url)
         {
             if (_crawler == null) { _crawler = new Crawler(); }
-            _crawler.ParseLink(url);
+            _crawler.ParseLinkText(url);
         }
 
-        public List<String> Crawl(String start_url, int depth)
+        public void Crawl(String start_url, int depth)
         {
             if (_crawler == null) { _crawler = new Crawler(); }
-            return _crawler.Crawl(start_url, depth);
+            _crawler.Crawl(start_url, depth);
         }
     }
 }

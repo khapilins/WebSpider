@@ -89,6 +89,16 @@
     <Compile Include="EntityDBClassesFolder\Page.cs" />
     <Compile Include="EntityDBClassesFolder\PageDBContext.cs" />
     <Compile Include="EntityDBClassesFolder\PageWord.cs" />
+    <Compile Include="Migrations\201511042213008_Initial.cs" />
+    <Compile Include="Migrations\201511042213008_Initial.Designer.cs">
+      <DependentUpon>201511042213008_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="MyCommand\FrequencySearchCommand.cs" />
+    <Compile Include="MyCommand\Invoker.cs" />
+    <Compile Include="MyCommand\MyCommand.cs" />
+    <Compile Include="MyCommand\Reciever.cs" />
+    <Compile Include="MyCommand\SimpleSearchCommand.cs" />
     <Compile Include="ProxyCrawler.cs" />
     <Compile Include="Searcher.cs" />
     <Compile Include="EntityDBClassesFolder\Word.cs" />
@@ -121,6 +131,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Migrations\201511042213008_Initial.resx">
+      <DependentUpon>201511042213008_Initial.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

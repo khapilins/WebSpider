@@ -5,8 +5,8 @@ namespace WebSpider
 {
     public interface ICrawler
     {
-        void ParseLink(string url);
+        void ParseLinkText(string url);
 
-        List<String> Crawl(String start_url, int depth);
+        void Crawl(String start_url, int depth);
     }
 }
