@@ -25,10 +25,12 @@
         </ListBox>
         <Button x:Name="SearchButton" Content="Искать" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Click="SearchButton_Click"/>
         <Grid Margin="10,38,10,0" VerticalAlignment="Top" Height="25">
-            <RadioButton x:Name="FrequencySearchradioButton" Content="По частоте" IsChecked="True" HorizontalAlignment="Left"/>
+            <RadioButton x:Name="FrequencySearchradioButton" Content="По частоте" HorizontalAlignment="Left"/>
             <RadioButton x:Name="SimpleSearchradioButton"  Content="По вхождению" HorizontalAlignment="Left" Margin="95,0,0,0"/>
+            <RadioButton x:Name="LocationSearchradioButton"  Content="По расположению" IsChecked="True" HorizontalAlignment="Left" Margin="202,0,0,0"/>
         </Grid>
         <Button x:Name="Undobutton" Content="Undo" HorizontalAlignment="Right" Margin="0,10,75,0" VerticalAlignment="Top" Width="60" Height="23" Click="Undobutton_Click"/>
         <Button x:Name="Redobutton" Content="Redo" HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Width="60" Height="23" Click="Redobutton_Click"/>
+        <TextBlock x:Name="ExecutionTimetextBlock" Margin="10,0,90,10" TextWrapping="Wrap" Text="" Foreground="Gray" VerticalAlignment="Bottom" Height="20"/>
     </Grid>
 </Window>

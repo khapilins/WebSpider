@@ -23,34 +23,72 @@ namespace WebSpider
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            // Stopwatch s = new Stopwatch();
-            // ProxyCrawler c = new ProxyCrawler();
-            // Thread t = new Thread(() =>
-            // {
-            //    s.Start();
-            //    c.Crawl(@"http://ru.wikipedia.org", 1);
-            //    s.Stop();
-            //    MessageBox.Show(s.ElapsedMilliseconds.ToString());
-            // });
-            // t.Start();
+            ////Stopwatch s = new Stopwatch();
+            ////Thread t = new Thread(d =>
+            ////{
             ////Crawler c = new Crawler();
-            //// c.CrawlNext(1);
-            this.invoker.ExecuteCommand(new SimpleSearchCommand(new Reciever(), ""));            
+            ////s.Start();
+            ////c.CrawlNext(2);
+            ////s.Stop();
+            ////MessageBox.Show(s.ElapsedMilliseconds.ToString());
+            ////});
+            Thread t = new Thread(s =>
+            {
+                using (PageDBContext pc = new PageDBContext())
+                {
+                    var query = from p in pc.Pages
+                                select p;
+                    foreach (var a in query)
+                    {
+                        var b = a;
+                    }
+
+                    var wquery = from w in pc.Words
+                                 select w;
+                    foreach (var a in wquery)
+                    {
+                        var b = a;
+                    }
+
+                    var pwquery = from pw in pc.Words
+                                  select pw;
+                    foreach (var a in pwquery)
+                    {
+                        var b = a;
+                    }
+                }
+            });
+            t.Start();
+            this.invoker.ExecuteCommand(new SimpleSearchCommand(new Reciever(), ""));
         }
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
+            Stopwatch t = new Stopwatch();
+            t.Start();
             Searcher s = new Searcher(SearchQuerytextBox.Text);
             s.SearchByFrequency();
             SearchResultslistBox.DataContext = s.Results;
             if (FrequencySearchradioButton.IsChecked == true)
             {
                 this.invoker.ExecuteCommand(new FrequencySearchCommand(new Reciever(), SearchQuerytextBox.Text));
+                this.invoker.Current++;
             }
-            else
+
+            if (SimpleSearchradioButton.IsChecked == true)
             {
                 SearchResultslistBox.DataContext = this.invoker.ExecuteCommand(new SimpleSearchCommand(new Reciever(), SearchQuerytextBox.Text));
+                this.invoker.Current++;
             }
+
+            if (LocationSearchradioButton.IsChecked == true)
+            {
+                SearchResultslistBox.DataContext = this.invoker.ExecuteCommand(new SearchByLocationCommand(new Reciever(), SearchQuerytextBox.Text));
+                this.invoker.Current++;
+            }
+
+            t.Stop();
+            ExecutionTimetextBlock.Text = t.ElapsedMilliseconds.ToString() + "ms";
         }
 
         private void Hyperlink_RequestNavigate(object sender, RoutedEventArgs e)
@@ -62,12 +100,20 @@ namespace WebSpider
 
         private void Undobutton_Click(object sender, RoutedEventArgs e)
         {
+            Stopwatch t = new Stopwatch();
+            t.Start();
             SearchResultslistBox.DataContext = this.invoker.Undo();
+            t.Stop();
+            ExecutionTimetextBlock.Text = t.ElapsedMilliseconds.ToString() + "ms";
         }
 
         private void Redobutton_Click(object sender, RoutedEventArgs e)
         {
+            Stopwatch t = new Stopwatch();
+            t.Start();
             SearchResultslistBox.DataContext = this.invoker.Redo();
+            t.Stop();
+            ExecutionTimetextBlock.Text = t.ElapsedMilliseconds.ToString() + "ms";
         }
     }
 }

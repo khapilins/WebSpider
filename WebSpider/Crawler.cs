@@ -21,6 +21,8 @@ namespace WebSpider
 
         public String URL { get; set; }
 
+        public string ExtractedTitle { get; set; }
+
         public string ExtractedParagraphs { get; set; }
 
         public string ExtractedHeaders { get; set; }
@@ -36,7 +38,7 @@ namespace WebSpider
             web.Encoding = Encoding.UTF8;
             try
             {
-                String HTMLText = web.DownloadString(url);
+                HTMLText = web.DownloadString(url);
                 HTMLText = Regex.Replace(HTMLText, "(</br>)|(<br>)", " ");
                 HTMLText = Regex.Replace(HTMLText, @"<span\s?(.*?)>|</span>", "");
                 HTMLText = Regex.Replace(HTMLText, "&(.*?);", " ");
@@ -52,7 +54,11 @@ namespace WebSpider
             List<String> quee = new List<string>();
             ParseLinkText(start_url);
             quee.AddRange(LINKS);
-            SaveEntity();
+            if (!String.IsNullOrWhiteSpace(ExtractedTitle))
+            {
+                SaveEntity();
+            }
+
             LINKS = new List<string>();
             for (int i = 1; i < depth; ++i)
             {
@@ -61,7 +67,11 @@ namespace WebSpider
                 {
                     ParseLinkText(quee[0]);
                     quee.AddRange(LINKS);
-                    SaveEntity();
+                    if (!String.IsNullOrWhiteSpace(ExtractedTitle))
+                    {
+                        SaveEntity();
+                    }
+
                     LINKS = new List<string>();
                     quee.RemoveAt(0);
                 }
@@ -72,11 +82,11 @@ namespace WebSpider
         {
             using (PageDBContext pc = new PageDBContext())
             {
-                foreach (Link l in Link.SelectLastLinks())
+                foreach (Page p in pc.Pages)
                 {
-                    foreach (Page p in pc.Pages.Where(pp => pp.PageID == l.ToPage))
+                    if (String.IsNullOrEmpty(p.PageTitle))
                     {
-                        Crawl(p.Url, depth);
+                        this.Crawl(p.Url, depth);
                     }
                 }
             }
@@ -86,7 +96,7 @@ namespace WebSpider
         {
             PageDBContext pc = new PageDBContext();
             Page temp_page;
-            temp_page = new Page(URL);
+            temp_page = new Page(URL, ExtractedTitle);
             List<Page> temp_page_list = new List<Page>();
             for (int i = 0; i < LINKS.Count(); i++)
             {
@@ -122,16 +132,18 @@ namespace WebSpider
         private void ParseHTMLForText()
         {
             StringBuilder res = new StringBuilder();
+            ParseTitleChain init = new ParseTitleChain();
             ParseLinksChain firstchain = new ParseLinksChain();
             ParseHeadersChain second = new ParseHeadersChain();
             ParseParagraphsChain third = new ParseParagraphsChain();
             ParseDivsChain fourth = new ParseDivsChain();
             ParseLinksTextChain fifth = new ParseLinksTextChain();
+            init.SetNext(firstchain);
             firstchain.SetNext(second);
             second.SetNext(third);
             third.SetNext(fourth);
             fourth.SetNext(fifth);
-            firstchain.SendNext(this);
+            init.SendNext(this);
         }
     }
 }

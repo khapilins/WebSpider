@@ -42,23 +42,6 @@ namespace WebSpider
 
         public int FromPage { get; set; }
 
-        public int ToPage { get; set; }
-
-        public static List<Link> SelectLastLinks()
-        {
-            List<Link> res = new List<Link>();
-            using (PageDBContext pc = new PageDBContext())
-            {
-                foreach (Link l in pc.Link)
-                {
-                    if (pc.Link.Any(ll => ll.FromPage != l.ToPage))
-                    {
-                        res.Add(l);
-                    }
-                }
-            }
-
-            return res;
-        }
+        public int ToPage { get; set; }        
     }
 }

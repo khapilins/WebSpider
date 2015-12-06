@@ -21,7 +21,37 @@ namespace WebSpider
             else { Next = next; }
         }
 
-        public virtual void SendNext(Crawler c) { if (this.Next != null) { this.Next.SendNext(c); } }        
+        public virtual void SendNext(Crawler c) { if (this.Next != null) { this.Next.SendNext(c); } }
+    }
+
+    public class ParseTitleChain : BaseParseChain
+    {
+        public override void SendNext(Crawler c)
+        {
+            this.ExtractTitle(c);
+            if (!String.IsNullOrWhiteSpace(c.ExtractedTitle))
+            {
+                base.SendNext(c);
+            }
+        }
+
+        private void ExtractTitle(Crawler c)
+        {
+            MatchCollection regex_reults = Regex.Matches(c.HTMLText, @"<title\s?(.*?)>(.*?)</", RegexOptions.Multiline);
+            StringBuilder s = new StringBuilder();
+            try
+            {
+                string subres = regex_reults[0].Groups[2].Value;
+                if (!String.IsNullOrWhiteSpace(subres))
+                {
+                    c.ExtractedTitle = subres;
+                }
+            }
+            catch
+            {
+                c.ExtractedTitle = null;
+            }
+        }
     }
 
     public class ParseHeadersChain : BaseParseChain

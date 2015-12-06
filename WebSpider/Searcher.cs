@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Iveonik.Stemmers;
 
 namespace WebSpider
 {
@@ -63,7 +64,13 @@ namespace WebSpider
             List<Page> foundPages = new List<Page>();
             for (int i = 0; i < words.Count(); i++)
             {
-                foundPageWord.AddRange(PageWord.GetPageWordByWord(words[i].WordValue));
+                foundPageWord.AddRange(PageWord.GetPageWordByStem(words[i].WordStem));
+            }
+
+            Dictionary<Word, float> Probabilities = new Dictionary<Word, float>();
+            foreach (Word w in words)
+            {
+                Probabilities.Add(w, w.Probability);
             }
 
             foreach (PageWord pw in foundPageWord)
@@ -83,7 +90,53 @@ namespace WebSpider
                     {
                         if (pageWord.WordID == word.WordID && pageWord.PageID == page.PageID)
                         {
-                            s.Score++;
+                            s.Score += 1 - Probabilities[word];
+                        }
+                    }
+                }
+
+                this.Results.Add(s);
+            }
+
+            this.NormaliseAndSortResults();
+        }
+
+        public void SearchByLocation()
+        {
+            this.Results = new List<SearchResults>();
+            List<String> urls = new List<string>();
+            List<Word> words = this.SplitQuery();
+            List<PageWord> foundPageWord = new List<PageWord>();
+            List<Page> foundPages = new List<Page>();
+            for (int i = 0; i < words.Count(); i++)
+            {
+                foundPageWord.AddRange(PageWord.GetPageWordByStem(words[i].WordStem));
+            }
+
+            Dictionary<Word, float> Probabilities = new Dictionary<Word, float>();
+            foreach (Word w in words)
+            {
+                Probabilities.Add(w, w.Probability);
+            }
+
+            foreach (PageWord pw in foundPageWord)
+            {
+                if (!foundPages.Contains(pw.ConcretePage))
+                {
+                    foundPages.Add(pw.ConcretePage);
+                }
+            }
+
+            foreach (Page page in foundPages)
+            {
+                SearchResults s = new SearchResults(page, 0);
+                foreach (Word word in words)
+                {
+                    foreach (PageWord pageWord in foundPageWord)
+                    {
+                        if (pageWord.WordID == word.WordID && pageWord.PageID == page.PageID)
+                        {
+                            s.Score += (1 - Probabilities[word]) * (1.0f / pageWord.Location);
                         }
                     }
                 }
@@ -113,6 +166,23 @@ namespace WebSpider
             for (int i = 0; i < words.Length; ++i)
             {
                 res.Add(new Word(words[i].ToLower()));
+            }
+
+            return res;
+        }
+
+        private List<int> GetWordsIDs()
+        {
+            List<int> res = new List<int>();
+            string[] words = Query.Split(new char[] { ' ', '\n', '.', ',', '\'', '(', ')', ':', '/', '\\', '[', ']', '\"' }, StringSplitOptions.RemoveEmptyEntries);
+            using (PageDBContext pc = new PageDBContext())
+            {
+                for (int i = 0; i < words.Length; ++i)
+                {
+                    res.AddRange(from w in pc.Words
+                                 where w.WordStem == Word.Stem(words[i])
+                                 select w.WordID);
+                }
             }
 
             return res;

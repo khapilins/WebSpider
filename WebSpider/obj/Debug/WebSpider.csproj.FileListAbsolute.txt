@@ -16,4 +16,5 @@ C:\Users\khapi\Documents\Visual Studio 2015\Projects\WebSpider\WebSpider\bin\Deb
 C:\Users\khapi\Documents\Visual Studio 2015\Projects\WebSpider\WebSpider\bin\Debug\EntityFramework.xml
 C:\Users\khapi\Documents\Visual Studio 2015\Projects\WebSpider\WebSpider\bin\Debug\EntityFramework.SqlServer.xml
 C:\Users\khapi\Documents\Visual Studio 2015\Projects\WebSpider\WebSpider\obj\Debug\WebSpider.csprojResolveAssemblyReference.cache
-C:\Users\khapi\Documents\Visual Studio 2015\Projects\WebSpider\WebSpider\obj\Debug\WebSpider.Migrations.Initial.resources
+C:\Users\khapi\Documents\Visual Studio 2015\Projects\WebSpider\WebSpider\bin\Debug\StemmersNet.dll
+C:\Users\khapi\Documents\Visual Studio 2015\Projects\WebSpider\WebSpider\bin\Debug\StemmersNet.pdb

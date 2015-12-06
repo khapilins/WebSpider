@@ -106,5 +106,25 @@ namespace WebSpider
 
             return res;
         }
+
+        public static List<PageWord> GetPageWordByStem(string stem)
+        {
+            List<PageWord> res = new List<PageWord>();
+            using (PageDBContext pc = new PageDBContext())
+            {
+                IEnumerable<Word> words = from w in pc.Words
+                                          where w.WordStem == stem
+                                          select w;
+                foreach (Word w in words)
+                {
+                    IEnumerable<PageWord> query = from pw in pc.PageWord
+                                                  where pw.WordID == w.WordID
+                                                  select pw;
+                    res.AddRange(query);
+                }
+            }
+
+            return res;
+        }
     }
 }

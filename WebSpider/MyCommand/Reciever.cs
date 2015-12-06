@@ -16,11 +16,19 @@ namespace WebSpider.MyCommand
                 s.SimpleSearch();
                 return s.Results;
             }
-            else
+
+            if (cmd is FrequencySearchCommand)
             {
                 s.SearchByFrequency();
                 return s.Results;
             }
+
+            if (cmd is SearchByLocationCommand)
+            {
+                s.SearchByLocation();
+                return s.Results;
+            }
+            else { return null; }
         }
     }
 }

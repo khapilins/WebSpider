@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
+using Iveonik.Stemmers;
 
 namespace WebSpider
 {
@@ -25,6 +27,7 @@ namespace WebSpider
                 if (query == null)
                 {
                     WordValue = word;
+                    WordStem = Word.Stem(word);
                     pc.Words.Add(this);
                     pc.SaveChanges();
                 }
@@ -32,6 +35,7 @@ namespace WebSpider
                 {
                     this.WordID = query.WordID;
                     this.WordValue = query.WordValue;
+                    this.WordStem = query.WordStem;
                 }
             }
         }
@@ -39,6 +43,8 @@ namespace WebSpider
         public int WordID { get; set; }
 
         public String WordValue { get; set; }
+
+        public String WordStem { get; set; }
 
         public float Probability
         {
@@ -56,6 +62,18 @@ namespace WebSpider
                     catch (InvalidOperationException iex)
                     { return 0; }
                 }
+            }
+        }
+
+        public static String Stem(String word)
+        {
+            if (Regex.IsMatch(word, "^[А-Яа-я]+$"))
+            {
+                return new RussianStemmer().Stem(word);
+            }
+            else
+            {
+                return new EnglishStemmer().Stem(word);
             }
         }
     }

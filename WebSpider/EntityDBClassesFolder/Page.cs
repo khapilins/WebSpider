@@ -13,9 +13,44 @@ namespace WebSpider
 {
     public class Page
     {
-        private string _pageTitle;
-
         public Page() { }
+
+        public Page(string URL, string Title)
+        {
+            using (PageDBContext pc = new PageDBContext())
+            {
+                Page query = null;
+                try
+                {
+                    query = pc.Pages.First(p => p.Url == URL);
+                }
+                catch (InvalidOperationException iex)
+                { }
+
+                if (query == null)
+                {
+                    this.Url = URL;
+                    this.PageTitle = Title;
+                    pc.Pages.Add(this);
+                    pc.SaveChanges();
+                }
+                else
+                {
+                    this.PageID = query.PageID;
+                    this.Url = query.Url;
+                    if (String.IsNullOrEmpty(query.PageTitle))
+                    {
+                        this.PageTitle = Title;
+                        query.PageTitle = Title;
+                        pc.SaveChanges();
+                    }
+                    else
+                    {
+                        this.PageTitle = query.PageTitle;
+                    }
+                }
+            }
+        }
 
         public Page(string URL)
         {
@@ -42,43 +77,12 @@ namespace WebSpider
                 }
             }
         }
-       
+
         public int PageID { get; set; }
 
         public string Url { get; set; }
 
-        public String PageTitle
-        {
-            get
-            {
-                if (String.IsNullOrEmpty(_pageTitle))
-                {                 
-                    WebClient web = new WebClient();
-                    web.Encoding = Encoding.UTF8;
-                    try
-                    {
-                        String HTMLText = web.DownloadString(this.Url);
-                        HTMLText = Regex.Replace(HTMLText, "(</br>)|(<br>)", " ");
-                        HTMLText = Regex.Replace(HTMLText, @"<span\s?(.*?)>|</span>", "");
-                        HTMLText = Regex.Replace(HTMLText, "&(.*?);", " ");
-
-                        MatchCollection regex_reults = Regex.Matches(HTMLText, @"<title\s?(.*?)>(.*?)</", RegexOptions.Multiline);
-                        StringBuilder s = new StringBuilder();
-                        string subres = regex_reults[0].Groups[2].Value;
-                        _pageTitle = subres;
-                    }
-                    catch
-                    { }                
-                }
-
-                return _pageTitle;                
-            }
-
-            set
-            {
-                _pageTitle = value;
-            }
-        }
+        public String PageTitle { get; set; }
 
         public override bool Equals(object obj)
         {
@@ -94,6 +98,11 @@ namespace WebSpider
             {
                 return false;
             }
+        }
+
+        public override int GetHashCode()
+        {
+            return this.Url.GetHashCode();
         }
     }
 }
