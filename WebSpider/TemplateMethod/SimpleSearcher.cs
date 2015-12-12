@@ -12,15 +12,18 @@ namespace WebSpider
         {
         }
 
-        public override List<SearchResults> SelectAndRankPages(List<Word> words, List<PageWord> page_words)
+        public override List<SearchResults> SelectAndRankPages(List<PageWord> page_words)
         {
-            foreach (Page p in from pw in page_words
-                               select pw.ConcretePage)
+            using (PageDBContext pc = new PageDBContext())
             {
-                if (words.Any(w => page_words.Any(paw => paw.WordID == w.WordID && paw.PageID == p.PageID)))
+                var pages = (from p in
+                                 from pw in page_words
+                                 select pw.ConcretePage
+                             select p).Distinct();
+                foreach (Page p in pages)
                 {
                     this.Results.Add(new SearchResults(p, 1));
-                }                          
+                }
             }
 
             return this.Results;

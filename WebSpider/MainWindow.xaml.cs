@@ -47,7 +47,7 @@ namespace WebSpider
             {
                 search_command = new SearchByLocationCommand(new Reciever(), SearchQuerytextBox.Text);
             }
-
+            
             res = this.invoker.ExecuteCommand(search_command);
             this.invoker.Current++;
             SearchResultslistBox.DataContext = res;

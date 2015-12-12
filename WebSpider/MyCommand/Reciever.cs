@@ -13,14 +13,14 @@ namespace WebSpider.MyCommand
             if (cmd is SimpleSearchCommand)
             {
                 var s = new SimpleSearcher(query);
-                s.Search(query);
+                s.Search();
                 return s.Results;
             }
 
             if (cmd is FrequencySearchCommand)
             {
                 var s = new FrequencySearcher(query);
-                s.Search(query);
+                s.Search();
                 return s.Results;
             }
 
@@ -30,7 +30,7 @@ namespace WebSpider.MyCommand
                 ////s.SearchByLocation();
                 ////return s.Results;
                 var s = new LocationSearcher(query);
-                s.Search(query);
+                s.Search();
                 return s.Results;
             }
             else { return null; }

@@ -17,37 +17,25 @@ namespace WebSpider
 
         public String Query { get; set; }
 
-        public List<Word> SelectWords(string[] words)
+        public List<PageWord> SelectPageWords()
         {
-            List<Word> res = new List<Word>();
+            string[] words = this.Query.ToLowerInvariant().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            List<PageWord> res = new List<PageWord>();
             using (PageDBContext pc = new PageDBContext())
             {
                 foreach (var word in words)
                 {
                     var stem = Word.Stem(word);
-                    res.AddRange((from w in pc.Words
-                                  where stem == w.WordStem
-                                  select w).ToList());
+                    var q = from pw in pc.PageWord
+                            join w in pc.Words on pw.WordID equals w.WordID
+                            join p in pc.Pages on pw.PageID equals p.PageID
+                            where w.WordStem == stem
+                            select pw;
+                    res.AddRange(q);
                 }
             }
 
             return res;
-        }
-
-        public List<PageWord> SelectPageWords(List<Word> words)
-        {
-            List<PageWord> res = new List<PageWord>();
-            using (PageDBContext pc = new PageDBContext())
-            {
-                foreach (Word w in words)
-                {
-                    res.AddRange((from pw in pc.PageWord
-                                  where pw.WordID == w.WordID
-                                  select pw).ToList());
-                }
-
-                return res;
-            }
         }
 
         public List<SearchResults> NormalizeAndSort(List<SearchResults> results)
@@ -65,16 +53,15 @@ namespace WebSpider
             return res;
         }
 
-        public List<SearchResults> Search(string query)
+        public List<SearchResults> Search()
         {
-            string[] words = Query.Split(new char[] { ' ', '\n', '.', ',', '\'', '(', ')', ':', '/', '\\', '[', ']', '\"' }, StringSplitOptions.RemoveEmptyEntries);
-            var Words = SelectWords(words);
-            var PageWords = SelectPageWords(Words);
-            Results = SelectAndRankPages(Words, PageWords);
+            string[] words = this.Query.Split(new char[] { ' ', '\n', '.', ',', '\'', '(', ')', ':', '/', '\\', '[', ']', '\"' }, StringSplitOptions.RemoveEmptyEntries);
+            var PageWords = SelectPageWords();
+            Results = SelectAndRankPages(PageWords);
             Results = NormalizeAndSort(Results);
             return Results;
         }
 
-        public abstract List<SearchResults> SelectAndRankPages(List<Word> words, List<PageWord> page_words);
+        public abstract List<SearchResults> SelectAndRankPages(List<PageWord> page_words);
     }
 }

@@ -12,38 +12,15 @@ namespace WebSpider
         {
         }
 
-        public override List<SearchResults> SelectAndRankPages(List<Word> words, List<PageWord> page_words)
+        public override List<SearchResults> SelectAndRankPages(List<PageWord> page_words)
         {
-            List<Page> foundPages = new List<Page>();
-            foreach (PageWord pw in page_words)
+            using (PageDBContext pc = new PageDBContext())
             {
-                if (!foundPages.Contains(pw.ConcretePage))
-                {
-                    foundPages.Add(pw.ConcretePage);
-                }
-            }
+                var pages_results = (from pw in page_words
+                                     group pw by pw into pwGroup
+                                     select new SearchResults(pwGroup.Key.ConcretePage, pwGroup.Sum(pw => 1f / pw.Location))).Distinct();
 
-            ////Dictionary<Word, float> Probs = new Dictionary<Word, float>();
-            ////foreach (Word w in words)
-            ////{
-            ////    Probs.Add(w, w.Probability);
-            ////}
-
-            foreach (Page page in foundPages)
-            {
-                SearchResults s = new SearchResults(page, 0);
-                foreach (Word word in words)
-                {
-                    foreach (PageWord pageWord in page_words)
-                    {
-                        if (pageWord.WordID == word.WordID && pageWord.PageID == page.PageID)
-                        {
-                            s.Score += 1.0f / pageWord.Location;
-                        }
-                    }
-                }
-
-                this.Results.Add(s);
+                this.Results = pages_results.ToList();
             }
 
             return this.Results;

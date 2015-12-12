@@ -15,38 +15,16 @@ namespace WebSpider
         /// <summary>
         /// Searching by word frequency on page, more is better
         /// </summary>
-        public override List<SearchResults> SelectAndRankPages(List<Word> words, List<PageWord> page_words)
+        public override List<SearchResults> SelectAndRankPages(List<PageWord> page_words)
         {
-            List<Page> foundPages = new List<Page>();
-            foreach (PageWord pw in page_words)
+            using (PageDBContext pc = new PageDBContext())
             {
-                if (!foundPages.Contains(pw.ConcretePage))
-                {
-                    foundPages.Add(pw.ConcretePage);
-                }
-            }
-
-            ////Dictionary<Word, float> Probs = new Dictionary<Word, float>();
-            ////foreach (Word w in words)
-            ////{
-            ////    Probs.Add(w, w.Probability);
-            ////}
-
-            foreach (Page page in foundPages)
-            {
-                SearchResults s = new SearchResults(page, 0);
-                foreach (Word word in words)
-                {
-                    foreach (PageWord pageWord in page_words)
-                    {
-                        if (pageWord.WordID == word.WordID && pageWord.PageID == page.PageID)
-                        {
-                            s.Score += 1;
-                        }
-                    }
-                }
-
-                this.Results.Add(s);
+                var pages_results = (from p in
+                                         from pw in page_words
+                                         select pw.ConcretePage
+                                     group p by p into pagesGroup
+                                     select new SearchResults(pagesGroup.Key, (float)pagesGroup.Count())).Distinct();
+                this.Results = pages_results.ToList();
             }
 
             return this.Results;
