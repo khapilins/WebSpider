@@ -9,6 +9,11 @@ namespace WebSpider
 {
     public class PageDBContext : DbContext
     {
+        public PageDBContext() : base()
+        {
+            this.Configuration.LazyLoadingEnabled = false;
+        }
+
         public DbSet<Page> Pages { get; set; }
 
         public DbSet<Word> Words { get; set; }

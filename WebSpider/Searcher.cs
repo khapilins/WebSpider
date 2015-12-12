@@ -7,6 +7,64 @@ using Iveonik.Stemmers;
 
 namespace WebSpider
 {
+    public class SearchResults
+    {
+        public SearchResults(Page res_page, float score)
+        {
+            this.ResultPage = res_page;
+            this.Score = score;
+        }
+
+        public Page ResultPage { get; set; }
+
+        public string ResultLink
+        {
+            get
+            {
+                return ResultPage.Url;
+            }
+        }
+
+        public String PageTitle
+        {
+            get
+            {
+                return ResultPage.PageTitle;
+            }
+        }
+
+        public float Score { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            try
+            {
+                if (this.ResultPage == ((SearchResults)obj).ResultPage)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public override int GetHashCode()
+        {
+            return this.PageTitle.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return this.ResultLink;
+        }
+    }
+
     public class Searcher
     {
         public List<SearchResults> Results = new List<SearchResults>();
@@ -136,7 +194,7 @@ namespace WebSpider
                     {
                         if (pageWord.WordID == word.WordID && pageWord.PageID == page.PageID)
                         {
-                            s.Score += (1 - Probabilities[word]) * (1.0f / pageWord.Location);
+                            s.Score += 1.0f / pageWord.Location;
                         }
                     }
                 }
@@ -187,39 +245,5 @@ namespace WebSpider
 
             return res;
         }
-    }
-
-    public class SearchResults
-    {
-        public SearchResults(Page res_page, float score)
-        {
-            this.ResultPage = res_page;
-            this.Score = score;
-        }
-
-        public Page ResultPage { get; set; }
-
-        public string ResultLink
-        {
-            get
-            {
-                return ResultPage.Url;
-            }
-        }
-
-        public String PageTitle
-        {
-            get
-            {
-                return ResultPage.PageTitle;
-            }
-        }
-
-        public float Score { get; set; }
-
-        public override string ToString()
-        {
-            return this.ResultLink;
-        }
-    }
+    }    
 }

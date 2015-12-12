@@ -8,6 +8,9 @@ namespace WebSpider.MyCommand
 {
     public abstract class MyCommand
     {        
+        public MyCommand()
+        { }
+
         public MyCommand(Reciever rec, String query)
         {
             Reciever = rec;

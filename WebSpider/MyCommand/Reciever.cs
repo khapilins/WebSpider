@@ -9,23 +9,28 @@ namespace WebSpider.MyCommand
     public class Reciever
     {
         public List<SearchResults> Action(string query, MyCommand cmd)
-        {
-            Searcher s = new Searcher(query);
+        {            
             if (cmd is SimpleSearchCommand)
             {
-                s.SimpleSearch();
+                var s = new SimpleSearcher(query);
+                s.Search(query);
                 return s.Results;
             }
 
             if (cmd is FrequencySearchCommand)
             {
-                s.SearchByFrequency();
+                var s = new FrequencySearcher(query);
+                s.Search(query);
                 return s.Results;
             }
 
             if (cmd is SearchByLocationCommand)
             {
-                s.SearchByLocation();
+                ////var s = new Searcher(query);
+                ////s.SearchByLocation();
+                ////return s.Results;
+                var s = new LocationSearcher(query);
+                s.Search(query);
                 return s.Results;
             }
             else { return null; }

@@ -8,6 +8,9 @@ namespace WebSpider.MyCommand
 {
     public class SimpleSearchCommand : MyCommand
     {
+        public SimpleSearchCommand()
+        { }
+
         public SimpleSearchCommand(Reciever rec, String query) :
             base(rec, query)
         { }

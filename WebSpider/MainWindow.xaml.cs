@@ -5,6 +5,7 @@ using System.Windows.Documents;
 using System.Windows.Navigation;
 using System.Linq;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using WebSpider.MyCommand;
 
 namespace WebSpider
@@ -23,72 +24,35 @@ namespace WebSpider
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            ////Stopwatch s = new Stopwatch();
-            ////Thread t = new Thread(d =>
-            ////{
-            ////Crawler c = new Crawler();
-            ////s.Start();
-            ////c.CrawlNext(2);
-            ////s.Stop();
-            ////MessageBox.Show(s.ElapsedMilliseconds.ToString());
-            ////});
-            Thread t = new Thread(s =>
-            {
-                using (PageDBContext pc = new PageDBContext())
-                {
-                    var query = from p in pc.Pages
-                                select p;
-                    foreach (var a in query)
-                    {
-                        var b = a;
-                    }
-
-                    var wquery = from w in pc.Words
-                                 select w;
-                    foreach (var a in wquery)
-                    {
-                        var b = a;
-                    }
-
-                    var pwquery = from pw in pc.Words
-                                  select pw;
-                    foreach (var a in pwquery)
-                    {
-                        var b = a;
-                    }
-                }
-            });
-            t.Start();
             this.invoker.ExecuteCommand(new SimpleSearchCommand(new Reciever(), ""));
         }
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
             Stopwatch t = new Stopwatch();
+            List<SearchResults> res = new List<SearchResults>();
             t.Start();
-            Searcher s = new Searcher(SearchQuerytextBox.Text);
-            s.SearchByFrequency();
-            SearchResultslistBox.DataContext = s.Results;
+            MyCommand.MyCommand search_command = new SimpleSearchCommand();
             if (FrequencySearchradioButton.IsChecked == true)
             {
-                this.invoker.ExecuteCommand(new FrequencySearchCommand(new Reciever(), SearchQuerytextBox.Text));
-                this.invoker.Current++;
+                search_command = new FrequencySearchCommand(new Reciever(), SearchQuerytextBox.Text);
             }
 
             if (SimpleSearchradioButton.IsChecked == true)
             {
-                SearchResultslistBox.DataContext = this.invoker.ExecuteCommand(new SimpleSearchCommand(new Reciever(), SearchQuerytextBox.Text));
-                this.invoker.Current++;
+                search_command = new SimpleSearchCommand(new Reciever(), SearchQuerytextBox.Text);
             }
 
             if (LocationSearchradioButton.IsChecked == true)
             {
-                SearchResultslistBox.DataContext = this.invoker.ExecuteCommand(new SearchByLocationCommand(new Reciever(), SearchQuerytextBox.Text));
-                this.invoker.Current++;
+                search_command = new SearchByLocationCommand(new Reciever(), SearchQuerytextBox.Text);
             }
 
+            res = this.invoker.ExecuteCommand(search_command);
+            this.invoker.Current++;
+            SearchResultslistBox.DataContext = res;
             t.Stop();
-            ExecutionTimetextBlock.Text = t.ElapsedMilliseconds.ToString() + "ms";
+            ExecutionTimetextBlock.Text = t.ElapsedMilliseconds + "ms";
         }
 
         private void Hyperlink_RequestNavigate(object sender, RoutedEventArgs e)
@@ -114,6 +78,20 @@ namespace WebSpider
             SearchResultslistBox.DataContext = this.invoker.Redo();
             t.Stop();
             ExecutionTimetextBlock.Text = t.ElapsedMilliseconds.ToString() + "ms";
+        }
+
+        private void openCrawlWindowButton_Click(object sender, RoutedEventArgs e)
+        {
+            var w = new CrawlWindow();
+            w.Show();
+        }
+
+        private void Window_Closed(object sender, System.EventArgs e)
+        {
+            foreach (var t in CrawlWindow.Tasks)
+            {
+                t.Abort();
+            }
         }
     }
 }
