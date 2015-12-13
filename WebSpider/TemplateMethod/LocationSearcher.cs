@@ -20,7 +20,7 @@ namespace WebSpider
                                      group pw by pw into pwGroup
                                      select new SearchResults(pwGroup.Key.ConcretePage, pwGroup.Sum(pw => 1f / pw.Location))).Distinct();
 
-                this.Results = pages_results.ToList();
+                this.Results = pages_results.Distinct().ToList();
             }
 
             return this.Results;

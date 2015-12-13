@@ -18,7 +18,7 @@ namespace WebSpider
     /// <summary>
     /// Interaction logic for CrawlWindow.xaml
     /// </summary>
-    public partial class CrawlWindow : Window
+    public partial class CrawlWindow : MahApps.Metro.Controls.MetroWindow
     {
         public static List<Thread> Tasks = new List<Thread>();
         private static List<String> TaskNames = new List<string>();
@@ -33,7 +33,7 @@ namespace WebSpider
             try
             {
                 string tmp_link = StartLinkTextBox.Text;
-                int tmp_depth = Int32.Parse(DepthTextBox.Text);
+                int tmp_depth = (int)DepthTextBox.Value;
                 Thread t = new Thread(() =>
                 {
                     Crawler c = new Crawler();
@@ -63,7 +63,7 @@ namespace WebSpider
         {
             try
             {                
-                int tmp_depth = Int32.Parse(DepthTextBox.Text);
+                int tmp_depth = (int)DepthTextBox.Value;
                 Thread t = new Thread(() =>
                 {
                     Crawler c = new Crawler();

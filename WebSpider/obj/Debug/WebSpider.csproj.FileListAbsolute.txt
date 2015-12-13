@@ -20,3 +20,6 @@ C:\Users\khapi\Documents\Visual Studio 2015\Projects\WebSpider\WebSpider\bin\Deb
 C:\Users\khapi\Documents\Visual Studio 2015\Projects\WebSpider\WebSpider\bin\Debug\StemmersNet.pdb
 C:\Users\khapi\Documents\Visual Studio 2015\Projects\WebSpider\WebSpider\obj\Debug\CrawlWindow.g.cs
 C:\Users\khapi\Documents\Visual Studio 2015\Projects\WebSpider\WebSpider\obj\Debug\CrawlWindow.baml
+C:\Users\khapi\Documents\Visual Studio 2015\Projects\WebSpiderMahApp\WebSpider\bin\Debug\WebSpider.exe.config
+C:\Users\khapi\Documents\Visual Studio 2015\Projects\WebSpiderMahApp\WebSpider\obj\Debug\WebSpider.exe
+C:\Users\khapi\Documents\Visual Studio 2015\Projects\WebSpiderMahApp\WebSpider\obj\Debug\WebSpider.pdb

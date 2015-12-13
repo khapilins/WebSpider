@@ -7,13 +7,14 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebSpider.MyCommand;
+using MahApps.Metro.Controls;
 
 namespace WebSpider
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : MetroWindow
     {
         private Invoker invoker = new Invoker();
 
@@ -25,12 +26,18 @@ namespace WebSpider
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             this.invoker.ExecuteCommand(new SimpleSearchCommand(new Reciever(), ""));
+            SearchProgressRing.Opacity = 0f;
         }
 
-        private void SearchButton_Click(object sender, RoutedEventArgs e)
+        private async void SearchButton_Click(object sender, RoutedEventArgs e)
         {
             Stopwatch t = new Stopwatch();
-            List<SearchResults> res = new List<SearchResults>();
+            SearchResultslistBox.DataContext = new object();
+            SearchProgressRing.BeginInit();
+            SearchProgressRing.Opacity = 1f;
+            SearchProgressRing.IsActive = true;
+            SearchProgressRing.EndInit();
+            List<SearchResults> res = null;
             t.Start();
             MyCommand.MyCommand search_command = new SimpleSearchCommand();
             if (FrequencySearchradioButton.IsChecked == true)
@@ -47,12 +54,19 @@ namespace WebSpider
             {
                 search_command = new SearchByLocationCommand(new Reciever(), SearchQuerytextBox.Text);
             }
-            
-            res = this.invoker.ExecuteCommand(search_command);
-            this.invoker.Current++;
-            SearchResultslistBox.DataContext = res;
-            t.Stop();
-            ExecutionTimetextBlock.Text = t.ElapsedMilliseconds + "ms";
+
+            await Task.Run(() =>
+                        {
+                            res = this.invoker.ExecuteCommand(search_command);
+                            this.invoker.Current++;
+                            Application.Current.Dispatcher.BeginInvoke(new System.Action(() =>
+                            {
+                                SearchResultslistBox.DataContext = res;
+                                SearchProgressRing.Opacity = 0f;
+                                t.Stop();
+                                ExecutionTimetextBlock.Text = t.ElapsedMilliseconds + "ms";
+                            }));
+                        });
         }
 
         private void Hyperlink_RequestNavigate(object sender, RoutedEventArgs e)
@@ -91,6 +105,14 @@ namespace WebSpider
             foreach (var t in CrawlWindow.Tasks)
             {
                 t.Abort();
+            }
+        }
+
+        private void SearchQuerytextBox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.Enter)
+            {
+                this.SearchButton_Click(sender, e);
             }
         }
     }

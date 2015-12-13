@@ -98,7 +98,7 @@ namespace WebSpider
             {
                 return false;
             }
-        }
+        }        
 
         public override int GetHashCode()
         {

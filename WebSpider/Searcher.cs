@@ -39,7 +39,7 @@ namespace WebSpider
         {
             try
             {
-                if (this.ResultPage == ((SearchResults)obj).ResultPage)
+                if (this.ResultPage.Equals(((SearchResults)obj).ResultPage))
                 {
                     return true;
                 }

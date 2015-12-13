@@ -1,19 +1,21 @@
-﻿<Window x:Class="WebSpider.CrawlWindow"
+﻿<Controls:MetroWindow x:Class="WebSpider.CrawlWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:local="clr-namespace:WebSpider"
         mc:Ignorable="d"
-        Title="CrawlWindow" Height="365.414" Width="396.992" Loaded="Window_Loaded">
+        Title="CrawlWindow" Height="370.747" Width="416.326" MinWidth="416" MinHeight="370" Loaded="Window_Loaded"
+        BorderBrush="DarkSlateBlue" BorderThickness="1">
     <Grid x:Name="MainGrid">
-        <TextBox x:Name="StartLinkTextBox" HorizontalAlignment="Left" Height="34" Margin="103,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="276"/>
-        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Начальная ссылка" VerticalAlignment="Top" Height="34" Width="88"/>
-        <Button x:Name="StartCrawlbutton" Content="Crawl" HorizontalAlignment="Left" Margin="120,49,0,0" VerticalAlignment="Top" Width="75" Height="25" Click="StartCrawlbutton_Click"/>
-        <TextBlock x:Name="textBlock_Copy" HorizontalAlignment="Left" Margin="10,49,0,0" TextWrapping="Wrap" Text="Глубина" VerticalAlignment="Top" Height="25" Width="52"/>
-        <TextBox x:Name="DepthTextBox" HorizontalAlignment="Left" Height="25" Margin="62,49,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="53"/>
-        <Button x:Name="StartCrawlbutton_Copy" Content="Crawl from last" HorizontalAlignment="Left" Margin="200,49,0,0" VerticalAlignment="Top" Width="179" Height="25" Click="StartCrawlbutton_Copy_Click"/>
-        <ListBox x:Name="ThreadslistBox" ItemsSource="{Binding}" HorizontalAlignment="Left" Height="236" Margin="10,88,0,0" VerticalAlignment="Top" Width="369"/>
+        <TextBox x:Name="StartLinkTextBox" Height="34" Margin="130,10,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="268" HorizontalAlignment="Right"/>
+        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="10,17,0,0" Text="Начальная ссылка" VerticalAlignment="Top" Height="19" Width="105"/>
+        <Button x:Name="StartCrawlbutton" Content="Crawl" HorizontalAlignment="Right" Margin="0,49,186,0" VerticalAlignment="Top" Width="92" Height="25" Click="StartCrawlbutton_Click"/>
+        <TextBlock x:Name="textBlock_Copy" HorizontalAlignment="Left" Margin="10,53,0,0" Text="Глубина" VerticalAlignment="Top" Height="18" Width="49"/>
+        <Controls:NumericUpDown x:Name="DepthTextBox" Interval="1" Minimum="0" Maximum = "10" HorizontalAlignment="Left" Height="25" Margin="64,48,0,0" VerticalAlignment="Top" Width="61"/>
+        <Button x:Name="StartCrawlbutton_Copy" Content="Crawl from last" HorizontalAlignment="Right" Margin="0,49,10,0" VerticalAlignment="Top" Width="171" Height="25" Click="StartCrawlbutton_Copy_Click"/>
+        <ListBox x:Name="ThreadslistBox" ItemsSource="{Binding}" Margin="15,79,10,48"/>
 
     </Grid>
-</Window>
+</Controls:MetroWindow>
